@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beschaffungsprinzipien Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #startQuiz {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Beschaffungsprinzipien Quiz</h1>
+        <button id="startQuiz">Quiz starten</button>
+        <div id="quiz" style="display:none;">
+            <div id="question" class="question"></div>
+            <div id="options" class="options"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Wo müssen Materialien bereitgestellt werden?",
+                options: ["beim Lieferanten", "Am Produktionsort", "beim Konkurrenten"],
+                correctAnswer: 1
+            },
+            {
+                question: "Wann müssen Materialien verfügbar sein?",
+                options: ["Am Monatsende", "Immer", "Wenn sie gebraucht werden"],
+                correctAnswer: 2
+            },
+            {
+                question: "Was ist wichtig bei der Bestellmenge?",
+                options: ["Richtige Planung", "Maximale Menge", "Minimale Menge"],
+                correctAnswer: 0
+            },
+            {
+                question: "Worauf kommt es bei der Qualität an?",
+                options: ["Höchste Qualität", "Anforderungen erfüllen", "Niedrigste Qualität"],
+                correctAnswer: 1
+            },
+            {
+                question: "Was ist bei den Produkten wichtig?",
+                options: ["Bekannteste Marke", "Niedrigster Preis", "Richtige Spezifikationen"],
+                correctAnswer: 2
+            },
+            {
+                question: "Welche Kosten sollen minimiert werden?",
+                options: ["Nur Lagerkosten", "Bezugspreis, Bezugs- und Lagerkosten", "Nur Bezugspreis"],
+                correctAnswer: 1
+            },
+            {
+                question: "Wer braucht Zugang zu Beschaffungsinformationen?",
+                options: ["Niemand", "Beteiligte Mitarbeiter", "Nur die Geschäftsführung"],
+                correctAnswer: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const resultEl = document.getElementById("result");
+        const quizEl = document.getElementById("quiz");
+        const startQuizBtn = document.getElementById("startQuiz");
+
+        function startQuiz() {
+            startQuizBtn.style.display = "none";
+            quizEl.style.display = "block";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = quizData[currentQuestion];
+            questionEl.textContent = question.question;
+            
+            optionsEl.innerHTML = "";
+            question.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => selectOption(index));
+                optionsEl.appendChild(button);
+            });
+        }
+
+        function selectOption(index) {
+            const question = quizData[currentQuestion];
+            if (index === question.correctAnswer) {
+                score++;
+            }
+
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizEl.innerHTML = `
+                <h2>Quiz beendet!</h2>
+                <p>Sie haben ${score} von ${quizData.length} Fragen richtig beantwortet.</p>
+                <button onclick="location.reload()">Quiz neu starten</button>
+            `;
+        }
+
+        startQuizBtn.addEventListener("click", startQuiz);
+    </script>
+</body>
+</html>
